@@ -1,0 +1,9 @@
+# Web framework
+fastapi
+uvicorn[standard]
+
+# ML / data — pinned so the model loaded on Render matches the one we trained
+scikit-learn==1.8.0
+pandas==3.0.1
+numpy==2.4.3
+joblib

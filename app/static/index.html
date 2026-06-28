@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IPO Listing-Gain Predictor</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>IPO Listing-Gain Predictor</h1>
+      <p class="subtitle">
+        Estimates an Indian mainboard IPO's <strong>listing-day gain&nbsp;%</strong>
+        from signals known by bidding day&nbsp;3 — grey market premium, early
+        subscription, and market mood.
+      </p>
+      <p class="accuracy" id="accuracy">Loading model…</p>
+    </header>
+
+    <form id="predict-form">
+      <div class="grid" id="fields"><!-- inputs injected by script.js --></div>
+      <div class="actions">
+        <button type="button" id="reset-btn" class="ghost">Reset to medians</button>
+        <button type="submit" id="predict-btn">Predict listing gain</button>
+      </div>
+    </form>
+
+    <section class="result" id="result" hidden>
+      <div class="result-number">
+        <span id="gain" class="gain">—</span>
+        <span class="pm" id="band"></span>
+      </div>
+      <p class="interpretation" id="interpretation"></p>
+      <p class="disclaimer" id="disclaimer"></p>
+    </section>
+
+    <footer>
+      <span>Educational project — not investment advice.</span>
+    </footer>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
