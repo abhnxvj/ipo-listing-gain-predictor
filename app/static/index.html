@@ -4,41 +4,102 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IPO Listing-Gain Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <main class="card">
-    <header>
-      <h1>IPO Listing-Gain Predictor</h1>
-      <p class="subtitle">
-        Estimates an Indian mainboard IPO's <strong>listing-day gain&nbsp;%</strong>
-        from signals known by bidding day&nbsp;3 — grey market premium, early
-        subscription, and market mood.
-      </p>
-      <p class="accuracy" id="accuracy">Loading model…</p>
-    </header>
-
-    <form id="predict-form">
-      <div class="grid" id="fields"><!-- inputs injected by script.js --></div>
-      <div class="actions">
-        <button type="button" id="reset-btn" class="ghost">Reset to medians</button>
-        <button type="submit" id="predict-btn">Predict listing gain</button>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">▲</span>
+        <span class="brand-name">IPO Predict</span>
       </div>
-    </form>
 
-    <section class="result" id="result" hidden>
-      <div class="result-number">
-        <span id="gain" class="gain">—</span>
-        <span class="pm" id="band"></span>
+      <nav class="nav">
+        <a href="#predictor" class="nav-item active" data-target="predictor"><span class="icon">◧</span> Predictor</a>
+        <a href="#stats" class="nav-item" data-target="stats"><span class="icon">▦</span> Model stats</a>
+        <a href="#how" class="nav-item" data-target="how"><span class="icon">◍</span> How it works</a>
+        <a href="https://github.com/abhnxvj/ipo-listing-gain-predictor" target="_blank" rel="noopener" class="nav-item"><span class="icon">↗</span> Source code</a>
+      </nav>
+
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h2>IPO Listing-Gain Dashboard</h2>
+          <p>Predict an Indian mainboard IPO's listing-day gain from pre-listing signals.</p>
+        </div>
+        <div class="topbar-right">Educational, not advice</div>
       </div>
-      <p class="interpretation" id="interpretation"></p>
-      <p class="disclaimer" id="disclaimer"></p>
-    </section>
 
-    <footer>
-      <span>Educational project — not investment advice.</span>
-    </footer>
-  </main>
+      <div class="content">
+        <!-- Stat cards -->
+        <section id="stats" class="stat-cards">
+          <div class="stat-card green">
+            <div class="stat-lbl">Model accuracy</div>
+            <div class="stat-val" id="stat-r2">—</div>
+            <div class="stat-sub">R², honest walk-forward</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-lbl">Typical error</div>
+            <div class="stat-val" id="stat-mae">—</div>
+            <div class="stat-sub">percentage points, mean abs error</div>
+          </div>
+          <div class="stat-card neutral">
+            <div class="stat-lbl">Tested on</div>
+            <div class="stat-val" id="stat-ntest">—</div>
+            <div class="stat-sub" id="stat-period">out-of-time IPOs</div>
+          </div>
+        </section>
+
+        <!-- Predictor -->
+        <section id="predictor" class="calc-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Pre-listing signals</div>
+              <div class="card-sub">Enter what's known by bidding day 3, then predict the listing gain.</div>
+            </div>
+          </div>
+          <form id="predict-form">
+            <div class="param-grid" id="fields"></div>
+            <div class="actions">
+              <button type="button" id="reset-btn" class="btn ghost">Reset to medians</button>
+              <button type="submit" id="predict-btn" class="btn primary">Predict listing gain</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Result -->
+        <section class="calc-card result" id="result" hidden>
+          <div class="card-header"><div class="card-title">Predicted listing gain</div></div>
+          <div class="result-number">
+            <span id="gain" class="gain">—</span>
+            <span class="pm" id="band"></span>
+          </div>
+          <p class="interpretation" id="interpretation"></p>
+          <p class="disclaimer" id="disclaimer"></p>
+        </section>
+
+        <!-- How it works -->
+        <section id="how" class="calc-card">
+          <div class="card-header"><div class="card-title">How it works</div></div>
+          <ul class="how-list">
+            <li>Averaged gradient-boosting and random-forest model, trained on 309 Indian mainboard IPOs from 2022 to 2026.</li>
+            <li>Uses only the nine signals a retail investor can see by bidding day 3: issue size, early subscription, three-day GMP, and Nifty mood.</li>
+            <li>Scored walk-forward (train on the past, predict the future), so the accuracy above is leak-free rather than an inflated random split.</li>
+            <li>Educational only. Listing gains are noisy and the market regime shifts.</li>
+          </ul>
+        </section>
+
+        <footer class="page-foot">Educational project, not investment advice.</footer>
+      </div>
+    </main>
+  </div>
 
   <script src="/static/script.js"></script>
 </body>

@@ -1,16 +1,17 @@
-// Build the form from /api/meta, then call /api/predict on submit.
+// Build the dashboard from /api/meta, then predict via /api/predict.
 
 let META = null;
 
 async function loadMeta() {
   const res = await fetch("/api/meta");
   META = await res.json();
-
-  // Accuracy banner
   const m = META.metrics;
-  document.getElementById("accuracy").textContent =
-    `Honest accuracy: R² ${m.r2} · typical error ±${m.mae} pp ` +
-    `(tested on ${m.n_test} out-of-time IPOs, ${m.test_period}).`;
+
+  // Top stat cards
+  document.getElementById("stat-r2").textContent = m.r2;
+  document.getElementById("stat-mae").textContent = `±${m.mae}`;
+  document.getElementById("stat-ntest").textContent = m.n_test;
+  document.getElementById("stat-period").textContent = m.test_period;
 
   // Input fields
   const fields = document.getElementById("fields");
@@ -20,8 +21,7 @@ async function loadMeta() {
     wrap.className = "field";
     wrap.innerHTML = `
       <label for="${f.name}">${f.label}</label>
-      <input id="${f.name}" name="${f.name}" type="number" step="any"
-             value="${f.default}" />
+      <input id="${f.name}" name="${f.name}" type="number" step="any" value="${f.default}" />
       <span class="hint">${f.help}</span>`;
     fields.appendChild(wrap);
   }
@@ -46,6 +46,7 @@ function showResult(data) {
   document.getElementById("interpretation").textContent = data.interpretation;
   document.getElementById("disclaimer").textContent = data.disclaimer;
   result.hidden = false;
+  result.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 async function predict(evt) {
@@ -73,7 +74,7 @@ async function predict(evt) {
   } catch (e) {
     const result = document.getElementById("result");
     result.hidden = false;
-    result.querySelector("#gain").textContent = "—";
+    document.getElementById("gain").textContent = "—";
     document.getElementById("interpretation").innerHTML =
       `<span class="error">Error: ${e.message}</span>`;
   } finally {
@@ -82,6 +83,17 @@ async function predict(evt) {
   }
 }
 
+// ----- Sidebar active state on scroll-to -----
+function initNav() {
+  for (const item of document.querySelectorAll(".nav-item[data-target]")) {
+    item.addEventListener("click", () => {
+      document.querySelectorAll(".nav-item").forEach((n) => n.classList.remove("active"));
+      item.classList.add("active");
+    });
+  }
+}
+
+initNav();
 document.getElementById("predict-form").addEventListener("submit", predict);
 document.getElementById("reset-btn").addEventListener("click", resetToMedians);
 loadMeta();
