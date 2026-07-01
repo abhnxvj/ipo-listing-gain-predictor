@@ -8,8 +8,25 @@ const API_BASE = LOCAL ? "" : "https://ipo-listing-gain-predictor.onrender.com";
 let META = null;
 
 async function loadMeta() {
-  const res = await fetch(`${API_BASE}/api/meta`);
-  META = await res.json();
+  const fields = document.getElementById("fields");
+  const btn = document.getElementById("predict-btn");
+  btn.disabled = true;
+  fields.innerHTML =
+    `<p class="loading-note"><span class="spinner"></span>` +
+    `Loading model… the first load can take about 60 seconds while the server wakes up.</p>`;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/meta`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    META = await res.json();
+  } catch (e) {
+    fields.innerHTML =
+      `<p class="loading-note error">Couldn't reach the prediction server. ` +
+      `It may still be waking up — <button type="button" id="retry-meta" class="btn ghost">Retry</button></p>`;
+    document.getElementById("retry-meta").addEventListener("click", loadMeta);
+    return;
+  }
+
   const m = META.metrics;
 
   // Top stat cards
@@ -19,7 +36,6 @@ async function loadMeta() {
   document.getElementById("stat-period").textContent = m.test_period;
 
   // Input fields
-  const fields = document.getElementById("fields");
   fields.innerHTML = "";
   for (const f of META.feature_meta) {
     const wrap = document.createElement("div");
@@ -30,6 +46,7 @@ async function loadMeta() {
       <span class="hint">${f.help}</span>`;
     fields.appendChild(wrap);
   }
+  btn.disabled = false;
 }
 
 function resetToMedians() {
@@ -59,6 +76,7 @@ function showResult(data) {
 
 async function predict(evt) {
   evt.preventDefault();
+  if (!META) return; // model not loaded yet
   const btn = document.getElementById("predict-btn");
   btn.disabled = true;
   btn.textContent = "Calculating…";

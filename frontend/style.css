@@ -147,6 +147,8 @@ body {
   flex-shrink: 0;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.loading-note { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); }
+.loading-note.error { color: var(--red); }
 .loading-title { font-size: 14px; color: var(--text); font-family: "Space Grotesk", sans-serif; }
 .loading-sub { font-size: 11px; color: var(--text3); margin-top: 3px; font-variant-numeric: tabular-nums; }
 
