@@ -1,9 +1,14 @@
 // Build the dashboard from /api/meta, then predict via /api/predict.
 
+// Backend lives on Render. When developing against the local backend
+// (localhost) we call the same origin; in production (Vercel) we call Render.
+const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
+const API_BASE = LOCAL ? "" : "https://ipo-listing-gain-predictor.onrender.com";
+
 let META = null;
 
 async function loadMeta() {
-  const res = await fetch("/api/meta");
+  const res = await fetch(`${API_BASE}/api/meta`);
   META = await res.json();
   const m = META.metrics;
 
@@ -61,7 +66,7 @@ async function predict(evt) {
   }
 
   try {
-    const res = await fetch("/api/predict", {
+    const res = await fetch(`${API_BASE}/api/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
