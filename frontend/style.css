@@ -136,21 +136,9 @@ body {
 .btn.ghost:hover { color: var(--text); border-color: var(--text3); }
 .btn:disabled { opacity: 0.55; cursor: progress; }
 
-/* ===== Result loading ===== */
-.result-loading { display: flex; align-items: center; gap: 14px; padding: 4px 0 2px; }
-.spinner {
-  width: 26px; height: 26px;
-  border: 3px solid #e2e6ed;
-  border-top-color: var(--blue);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  flex-shrink: 0;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-note { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); }
+/* ===== Loading note ===== */
+.loading-note { grid-column: 1 / -1; font-size: 12px; color: var(--text2); }
 .loading-note.error { color: var(--red); }
-.loading-title { font-size: 14px; color: var(--text); font-family: "Space Grotesk", sans-serif; }
-.loading-sub { font-size: 11px; color: var(--text3); margin-top: 3px; font-variant-numeric: tabular-nums; }
 
 /* ===== Result ===== */
 .result-number { display: flex; align-items: baseline; gap: 12px; }
