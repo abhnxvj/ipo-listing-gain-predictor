@@ -77,12 +77,23 @@
         <!-- Result -->
         <section class="calc-card result" id="result" hidden>
           <div class="card-header"><div class="card-title">Predicted listing gain</div></div>
-          <div class="result-number">
-            <span id="gain" class="gain">—</span>
-            <span class="pm" id="band"></span>
+
+          <div id="result-loading" class="result-loading" hidden>
+            <span class="spinner"></span>
+            <div>
+              <div class="loading-title">Expected listing gain is being calculated…</div>
+              <div class="loading-sub" id="loading-sub">This can take about 60 seconds while the model wakes up.</div>
+            </div>
           </div>
-          <p class="interpretation" id="interpretation"></p>
-          <p class="disclaimer" id="disclaimer"></p>
+
+          <div id="result-content">
+            <div class="result-number">
+              <span id="gain" class="gain">—</span>
+              <span class="pm" id="band"></span>
+            </div>
+            <p class="interpretation" id="interpretation"></p>
+            <p class="disclaimer" id="disclaimer"></p>
+          </div>
         </section>
 
         <!-- How it works -->

@@ -39,8 +39,12 @@ function resetToMedians() {
   document.getElementById("result").hidden = true;
 }
 
+function setLoading(on) {
+  document.getElementById("result-loading").hidden = !on;
+  document.getElementById("result-content").hidden = on;
+}
+
 function showResult(data) {
-  const result = document.getElementById("result");
   const gainEl = document.getElementById("gain");
   const gain = data.predicted_gain_pct;
 
@@ -50,20 +54,33 @@ function showResult(data) {
   document.getElementById("band").textContent = `± ${data.mae_pp} pp typical error`;
   document.getElementById("interpretation").textContent = data.interpretation;
   document.getElementById("disclaimer").textContent = data.disclaimer;
-  result.hidden = false;
-  result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  setLoading(false);
 }
 
 async function predict(evt) {
   evt.preventDefault();
   const btn = document.getElementById("predict-btn");
   btn.disabled = true;
-  btn.textContent = "Predicting…";
+  btn.textContent = "Calculating…";
 
   const payload = {};
   for (const f of META.feature_meta) {
     payload[f.name] = parseFloat(document.getElementById(f.name).value);
   }
+
+  // Show the loading animation with a live elapsed-seconds counter.
+  const result = document.getElementById("result");
+  result.hidden = false;
+  setLoading(true);
+  result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  const started = Date.now();
+  const sub = document.getElementById("loading-sub");
+  const timer = setInterval(() => {
+    const s = Math.round((Date.now() - started) / 1000);
+    sub.textContent =
+      `Elapsed ${s}s — this can take about 60 seconds while the model wakes up.`;
+  }, 1000);
 
   try {
     const res = await fetch(`${API_BASE}/api/predict`, {
@@ -77,12 +94,16 @@ async function predict(evt) {
     }
     showResult(await res.json());
   } catch (e) {
-    const result = document.getElementById("result");
-    result.hidden = false;
+    setLoading(false);
     document.getElementById("gain").textContent = "—";
+    document.getElementById("band").textContent = "";
     document.getElementById("interpretation").innerHTML =
       `<span class="error">Error: ${e.message}</span>`;
+    document.getElementById("disclaimer").textContent = "";
   } finally {
+    clearInterval(timer);
+    sub.textContent =
+      "This can take about 60 seconds while the model wakes up.";
     btn.disabled = false;
     btn.textContent = "Predict listing gain";
   }
