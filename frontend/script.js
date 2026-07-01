@@ -1,9 +1,8 @@
 // Build the dashboard from /api/meta, then predict via /api/predict.
 
-// Backend lives on Render. When developing against the local backend
-// (localhost) we call the same origin; in production (Vercel) we call Render.
-const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
-const API_BASE = LOCAL ? "" : "https://ipo-listing-gain-predictor.onrender.com";
+// Single deployment: the same Render app serves this UI and the API,
+// so we call the API on the same origin (relative paths).
+const API_BASE = "";
 
 let META = null;
 

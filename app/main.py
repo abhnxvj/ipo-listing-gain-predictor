@@ -17,7 +17,6 @@ from pathlib import Path
 import joblib
 import pandas as pd
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -39,15 +38,6 @@ app = FastAPI(
     description="Predicts an Indian mainboard IPO's listing-day gain % from "
     "pre-listing signals (GMP, early subscription, Nifty mood).",
     version="1.0.0",
-)
-
-# The frontend is deployed separately (Vercel), so allow browsers on any
-# origin to call this API. It is a public, read-only educational endpoint.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
 )
 
 
