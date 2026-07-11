@@ -20,7 +20,7 @@ async function loadMeta() {
   } catch (e) {
     fields.innerHTML =
       `<p class="loading-note error">Couldn't reach the prediction server. ` +
-      `It may still be waking up — <button type="button" id="retry-meta" class="btn ghost">Retry</button></p>`;
+      `It may still be waking up. <button type="button" id="retry-meta" class="btn ghost">Retry</button></p>`;
     document.getElementById("retry-meta").addEventListener("click", loadMeta);
     return;
   }
@@ -95,7 +95,7 @@ async function predict(evt) {
   } catch (e) {
     const result = document.getElementById("result");
     result.hidden = false;
-    document.getElementById("gain").textContent = "—";
+    document.getElementById("gain").textContent = "…";
     document.getElementById("band").textContent = "";
     document.getElementById("interpretation").innerHTML =
       `<span class="error">Error: ${e.message}</span>`;

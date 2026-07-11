@@ -45,6 +45,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   color: #fff; font-size: 20px; line-height: 1;
 }
+.brand-icon img { width: 32px; height: 32px; display: block; }
 .brand-name {
   color: #fff;
   font-size: 17px;
